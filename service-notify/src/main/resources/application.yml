@@ -1,0 +1,5 @@
+spring:
+  application:
+    name: service-notify
+  profiles:
+    active: local

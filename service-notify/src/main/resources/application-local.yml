@@ -1,0 +1,8 @@
+server:
+  port: 8086
+
+spring:
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: zoni-notify-group # 카프카 메시지를 읽기 위한 그룹 ID
