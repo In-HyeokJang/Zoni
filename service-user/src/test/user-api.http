@@ -1,0 +1,18 @@
+### 회원가입
+POST http://localhost:8081/api/users/signup
+Content-Type: application/json
+
+{
+  "email": "test@zoni.com",
+  "password": "1234",
+  "nickname": "테스터"
+}
+
+### 로그인
+POST http://localhost:8081/api/users/login
+Content-Type: application/json
+
+{
+  "email": "test@zoni.com",
+  "password": "1234"
+}
