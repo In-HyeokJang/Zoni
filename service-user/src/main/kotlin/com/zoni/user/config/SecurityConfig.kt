@@ -38,6 +38,7 @@ class SecurityConfig(
                 it.requestMatchers(
                     "/api/users/signup",
                     "/api/users/login",
+                    "/api/users/refresh",   // refresh token은 자체가 인증 수단이므로 허용
                     "/health",
                     "/actuator/**"
                 ).permitAll()

@@ -10,7 +10,8 @@ import java.util.Date
 @Component
 class JwtProvider(
     @Value("\${jwt.secret}") private val secret: String,
-    @Value("\${jwt.access-token-expire}") private val expiration: Long
+    @Value("\${jwt.access-token-expire}") private val expiration: Long,
+    @Value("\${jwt.refresh-token-expire}") private val refreshExpiration: Long
 ) {
     private val key by lazy {
         Keys.hmacShaKeyFor(secret.toByteArray())
@@ -26,12 +27,24 @@ class JwtProvider(
             .compact()
     }
 
+    /** Refresh Token 생성 (7일, Redis에 저장해서 관리) */
+    fun generateRefreshToken(userId: Long, email: String): String {
+        return Jwts.builder()
+            .subject(email)
+            .claim("userId", userId)
+            .issuedAt(Date())
+            .expiration(Date(System.currentTimeMillis() + refreshExpiration))
+            .signWith(key)
+            .compact()
+    }
+
     fun getEmail(token: String): String {
         return getClaims(token).subject
     }
 
     fun getUserId(token: String): Long {
-        return getClaims(token)["userId"] as Long
+        // JWT Claims의 숫자는 Integer로 파싱되므로 Number로 받아서 toLong() 변환
+        return (getClaims(token)["userId"] as Number).toLong()
     }
 
     fun isValid(token: String): Boolean {

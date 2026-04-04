@@ -1,18 +1,71 @@
-### 회원가입
+### 1. 헬스체크 (서버 실행 확인)
+GET http://localhost:8081/health
+
+###
+
+### 2. 회원가입
 POST http://localhost:8081/api/users/signup
 Content-Type: application/json
 
 {
-  "email": "test@zoni.com",
+  "email": "tass@zoni.com",
   "password": "1234",
-  "nickname": "테스터"
+  "nickname": "tass"
 }
 
-### 로그인
+###
+
+### 3. 로그인 (accessToken + refreshToken 발급)
 POST http://localhost:8081/api/users/login
 Content-Type: application/json
 
 {
-  "email": "test@zoni.com",
+  "email": "tass@zoni.com",
   "password": "1234"
+}
+
+###
+
+### 4. 내 정보 조회 - 로그인 응답의 accessToken 복사해서 Bearer 뒤에 붙여넣기
+GET http://localhost:8081/api/users/me
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJ0YXNzQHpvbmkuY29tIiwidXNlcklkIjozLCJpYXQiOjE3NzUyNzE5NDQsImV4cCI6MTc3NTI3Mzc0NH0.QI3a8Y3PTabE4IE0pJVUhvxXwq86NiD297_YJf5EoSxgJs6dgBh5WCqK14o58ppt
+
+
+###
+
+### 5. Access Token 재발급 - 로그인 응답의 refreshToken 복사해서 붙여넣기
+POST http://localhost:8081/api/users/refresh
+Content-Type: application/json
+
+{
+  "refreshToken": "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJ0YXNzQHpvbmkuY29tIiwidXNlcklkIjozLCJpYXQiOjE3NzUyNzE5NDQsImV4cCI6MTc3NTg3Njc0NH0.ngtKoVNaXe3OaacnZVgkoDDjPDrbEO1dJTlwoyewoZt9SFc2oH7IhikAZOzhBnOu"
+}
+
+###
+
+### 6. 로그아웃 - accessToken 필요
+POST http://localhost:8081/api/users/logout
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJ0YXNzQHpvbmkuY29tIiwidXNlcklkIjozLCJpYXQiOjE3NzUyNzE5NDQsImV4cCI6MTc3NTI3Mzc0NH0.QI3a8Y3PTabE4IE0pJVUhvxXwq86NiD297_YJf5EoSxgJs6dgBh5WCqK14o58ppt
+
+###
+
+### 7. 중복 이메일 테스트 (409 응답 확인)
+POST http://localhost:8081/api/users/signup
+Content-Type: application/json
+
+{
+  "email": "tass@zoni.com",
+  "password": "1234",
+  "nickname": "tass"
+}
+
+###
+
+### 8. 잘못된 비밀번호 테스트 (401 응답 확인)
+POST http://localhost:8081/api/users/login
+Content-Type: application/json
+
+{
+  "email": "tass@zoni.com",
+  "password": "wrongpassword"
 }

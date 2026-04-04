@@ -5,6 +5,9 @@ build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 
+# 로컬 환경 설정 (Java 경로 등 개인 설정 포함)
+gradle.properties
+
 ### STS ###
 .apt_generated
 .classpath

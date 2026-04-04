@@ -1,0 +1,18 @@
+# =====================================================
+# gradle.properties 설정 예시
+# 이 파일을 복사해서 gradle.properties 로 이름 변경 후 사용
+# gradle.properties 는 .gitignore 에 등록되어 있음
+# =====================================================
+
+# Java 21 경로 설정 (Spring Boot 3.x 필수)
+# Windows 예시:
+org.gradle.java.home=C:/Users/{사용자명}/.jdks/temurin-21.0.10
+# Mac/Linux 예시:
+# org.gradle.java.home=/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home
+
+# Gradle 빌드 성능 설정
+org.gradle.daemon=true
+org.gradle.parallel=true
+org.gradle.caching=true
+org.gradle.jvmargs=-Xms256m -Xmx512m -XX:MaxMetaspaceSize=384m
+
