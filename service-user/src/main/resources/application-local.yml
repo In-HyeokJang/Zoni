@@ -15,5 +15,6 @@ spring:
       port: 6379
 
 jwt:
-  secret: zo니_secret_key_must_be_at_least_32_characters_long!
-  expiration: 86400000  # 24시간 (ms)
+  secret: zoni-super-secret-key-must-be-at-least-32-characters-long!
+  access-token-expire: 1800000    # 30분 (ms)
+  refresh-token-expire: 604800000 # 7일 (ms)
