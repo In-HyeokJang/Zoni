@@ -28,7 +28,7 @@ Content-Type: application/json
 
 ### 4. 내 정보 조회 - 로그인 응답의 accessToken 복사해서 Bearer 뒤에 붙여넣기
 GET http://localhost:8081/api/users/me
-Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJ0YXNzQHpvbmkuY29tIiwidXNlcklkIjozLCJpYXQiOjE3NzUyNzE5NDQsImV4cCI6MTc3NTI3Mzc0NH0.QI3a8Y3PTabE4IE0pJVUhvxXwq86NiD297_YJf5EoSxgJs6dgBh5WCqK14o58ppt
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJ0YXNzQHpvbmkuY29tIiwidXNlcklkIjozLCJpYXQiOjE3NzU2MjA4OTQsImV4cCI6MTc3NTYyMjY5NH0.vk7v8ogJm_kC4Dwan56rQi_LFqaKhO32O0yJ9zamcK9xSeNq00wHCfjguVffiqDR
 
 
 ###

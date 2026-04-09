@@ -17,10 +17,11 @@ class JwtProvider(
         Keys.hmacShaKeyFor(secret.toByteArray())
     }
 
-    fun generateToken(userId: Long, email: String): String {
+    fun generateToken(userId: Long, email: String, nickname: String): String {
         return Jwts.builder()
             .subject(email)
             .claim("userId", userId)
+            .claim("nickname", nickname)   // ← service-feed 등 다른 서비스에서 사용
             .issuedAt(Date())
             .expiration(Date(System.currentTimeMillis() + expiration))
             .signWith(key)
@@ -28,14 +29,19 @@ class JwtProvider(
     }
 
     /** Refresh Token 생성 (7일, Redis에 저장해서 관리) */
-    fun generateRefreshToken(userId: Long, email: String): String {
+    fun generateRefreshToken(userId: Long, email: String, nickname: String): String {
         return Jwts.builder()
             .subject(email)
             .claim("userId", userId)
+            .claim("nickname", nickname)
             .issuedAt(Date())
             .expiration(Date(System.currentTimeMillis() + refreshExpiration))
             .signWith(key)
             .compact()
+    }
+
+    fun getNickname(token: String): String {
+        return getClaims(token)["nickname"] as String
     }
 
     fun getEmail(token: String): String {

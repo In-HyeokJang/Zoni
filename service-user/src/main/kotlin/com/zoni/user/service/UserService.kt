@@ -43,8 +43,8 @@ class UserService(
             throw ZoniException(ErrorCode.UNAUTHORIZED)
         }
 
-        val accessToken = jwtProvider.generateToken(user.id, user.email)
-        val refreshToken = jwtProvider.generateRefreshToken(user.id, user.email)
+        val accessToken = jwtProvider.generateToken(user.id, user.email, user.nickname)
+        val refreshToken = jwtProvider.generateRefreshToken(user.id, user.email, user.nickname)
 
         // Redis에 refresh token 저장 (기존 값 덮어쓰기 → 중복 로그인 방지)
         refreshTokenService.save(user.id, refreshToken)
@@ -84,8 +84,8 @@ class UserService(
             .orElseThrow { ZoniException(ErrorCode.USER_NOT_FOUND) }
 
         // Token Rotation: 재발급 시 refresh token도 새로 발급해서 Redis 갱신
-        val newAccessToken  = jwtProvider.generateToken(userId, email)
-        val newRefreshToken = jwtProvider.generateRefreshToken(userId, email)
+        val newAccessToken  = jwtProvider.generateToken(userId, email, user.nickname)
+        val newRefreshToken = jwtProvider.generateRefreshToken(userId, email, user.nickname)
         refreshTokenService.save(userId, newRefreshToken)
 
         return LoginResponse(
