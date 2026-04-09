@@ -7,6 +7,7 @@ import com.zoni.feed.dto.request.FeedUpdateRequest
 import com.zoni.feed.dto.response.FeedPageResponse
 import com.zoni.feed.dto.response.FeedResponse
 import com.zoni.feed.service.FeedService
+import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.*
@@ -45,7 +46,7 @@ class FeedController(
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     fun createFeed(
-        @RequestBody request: FeedCreateRequest,
+        @Valid @RequestBody request: FeedCreateRequest,
         @AuthenticationPrincipal principal: JwtPrincipal
     ): ApiResponse<FeedResponse> =
         ApiResponse.ok(feedService.createFeed(principal.userId, principal.nickname, request))
@@ -58,7 +59,7 @@ class FeedController(
     @PutMapping("/{id}")
     fun updateFeed(
         @PathVariable id: Long,
-        @RequestBody request: FeedUpdateRequest,
+        @Valid @RequestBody request: FeedUpdateRequest,
         @AuthenticationPrincipal principal: JwtPrincipal
     ): ApiResponse<FeedResponse> =
         ApiResponse.ok(feedService.updateFeed(principal.userId, id, request))

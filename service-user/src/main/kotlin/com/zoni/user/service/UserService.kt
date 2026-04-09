@@ -99,13 +99,15 @@ class UserService(
 
     /**
      * 로그아웃
-     * Redis에서 refresh token 삭제 → 이후 재발급 불가
-     * (access token은 만료될 때까지 유효하나 짧은 30분이므로 실용적으로 OK)
+     * 1. Redis에서 refresh token 삭제 → 재발급 불가
+     * 2. Access token 블랙리스트 등록 → 남은 만료시간 동안 사용 차단
      */
-    fun logout(email: String) {
+    fun logout(email: String, accessToken: String) {
         val user = userRepository.findByEmail(email)
             .orElseThrow { ZoniException(ErrorCode.USER_NOT_FOUND) }
         refreshTokenService.delete(user.id)
+        val remainingMs = jwtProvider.getRemainingExpiration(accessToken)
+        refreshTokenService.addToBlacklist(accessToken, remainingMs)
     }
 
     /** 내 정보 조회 (JWT 인증 통과한 사용자만 호출 가능) */

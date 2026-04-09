@@ -8,6 +8,9 @@ dependencies {
     // Web (Spring MVC)
     implementation("org.springframework.boot:spring-boot-starter-web")
 
+    // Validation (@Valid, @NotBlank, @Email 등)
+    implementation("org.springframework.boot:spring-boot-starter-validation")
+
     // JPA + MySQL
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     runtimeOnly("com.mysql:mysql-connector-j:8.3.0")

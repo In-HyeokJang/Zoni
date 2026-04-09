@@ -57,6 +57,12 @@ class JwtProvider(
         return runCatching { getClaims(token) }.isSuccess
     }
 
+    /** 토큰 남은 만료시간(ms) 반환 → 블랙리스트 TTL에 사용 */
+    fun getRemainingExpiration(token: String): Long {
+        val expiration = getClaims(token).expiration
+        return (expiration.time - System.currentTimeMillis()).coerceAtLeast(0)
+    }
+
     private fun getClaims(token: String): Claims {
         return Jwts.parser()
             .verifyWith(key)

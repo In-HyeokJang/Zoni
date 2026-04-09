@@ -1,5 +1,6 @@
 package com.zoni.user.config
 
+import com.zoni.user.service.RefreshTokenService
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
@@ -16,12 +17,14 @@ import org.springframework.web.filter.OncePerRequestFilter
  * 동작 흐름:
  * 1. Authorization 헤더에서 "Bearer {token}" 추출
  * 2. JWT 유효성 검사
- * 3. 유효하면 SecurityContext에 인증 정보 등록
- * 4. 다음 필터로 전달
+ * 3. 블랙리스트(로그아웃된 토큰) 여부 확인
+ * 4. 유효하면 SecurityContext에 인증 정보 등록
+ * 5. 다음 필터로 전달
  */
 @Component
 class JwtAuthFilter(
-    private val jwtProvider: JwtProvider
+    private val jwtProvider: JwtProvider,
+    private val refreshTokenService: RefreshTokenService
 ) : OncePerRequestFilter() {
 
     override fun doFilterInternal(
@@ -31,11 +34,11 @@ class JwtAuthFilter(
     ) {
         val token = resolveToken(request)
 
-        if (token != null && jwtProvider.isValid(token)) {
+        if (token != null
+            && jwtProvider.isValid(token)
+            && !refreshTokenService.isBlacklisted(token)   // 블랙리스트 체크
+        ) {
             val email = jwtProvider.getEmail(token)
-
-            // SecurityContext에 인증 정보 등록
-            // principal = email, credentials = null, authorities = [ROLE_USER]
             val auth = UsernamePasswordAuthenticationToken(
                 email,
                 null,
@@ -47,9 +50,6 @@ class JwtAuthFilter(
         filterChain.doFilter(request, response)
     }
 
-    /**
-     * "Authorization: Bearer {token}" 헤더에서 토큰 값만 추출
-     */
     private fun resolveToken(request: HttpServletRequest): String? {
         val bearer = request.getHeader("Authorization") ?: return null
         if (!bearer.startsWith("Bearer ")) return null

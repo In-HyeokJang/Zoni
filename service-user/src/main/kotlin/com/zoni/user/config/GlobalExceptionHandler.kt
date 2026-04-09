@@ -4,6 +4,7 @@ import com.zoni.common.ApiResponse
 import com.zoni.common.ZoniException
 import org.slf4j.LoggerFactory
 import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.RestControllerAdvice
 
@@ -15,6 +16,28 @@ import org.springframework.web.bind.annotation.RestControllerAdvice
 class GlobalExceptionHandler {
 
     private val log = LoggerFactory.getLogger(javaClass)
+
+    /**
+     * 입력값 검증 실패 처리 (@Valid 검증 실패 시)
+     * 예: 빈 이메일, 이메일 형식 오류, 짧은 비밀번호 등
+     */
+    @ExceptionHandler(MethodArgumentNotValidException::class)
+    fun handleValidationException(e: MethodArgumentNotValidException): ResponseEntity<ApiResponse<Nothing>> {
+        // 첫 번째 에러 메시지만 반환 (여러 개면 첫 번째)
+        val message = e.bindingResult.fieldErrors
+            .firstOrNull()?.defaultMessage ?: "입력값이 올바르지 않습니다."
+        log.warn("[ValidationException] {}", message)
+        return ResponseEntity
+            .status(400)
+            .body(
+                ApiResponse.fail(
+                    ApiResponse.ErrorResponse(
+                        code = "BAD_REQUEST",
+                        message = message
+                    )
+                )
+            )
+    }
 
     /**
      * 비즈니스 예외 처리 (ZoniException)

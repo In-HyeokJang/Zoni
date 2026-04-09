@@ -7,6 +7,7 @@ import com.zoni.user.dto.request.TokenRefreshRequest
 import com.zoni.user.dto.response.LoginResponse
 import com.zoni.user.dto.response.UserResponse
 import com.zoni.user.service.UserService
+import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 import java.security.Principal
@@ -19,12 +20,12 @@ class UserController(
     /** 회원가입 → 생성된 userId 반환 */
     @PostMapping("/signup")
     @ResponseStatus(HttpStatus.CREATED)
-    fun signUp(@RequestBody request: SignUpRequest): ApiResponse<Long> =
+    fun signUp(@Valid @RequestBody request: SignUpRequest): ApiResponse<Long> =
         ApiResponse.ok(userService.signUp(request))
 
     /** 로그인 → accessToken + refreshToken 반환 */
     @PostMapping("/login")
-    fun login(@RequestBody request: LoginRequest): ApiResponse<LoginResponse> =
+    fun login(@Valid @RequestBody request: LoginRequest): ApiResponse<LoginResponse> =
         ApiResponse.ok(userService.login(request))
 
     /**
@@ -39,11 +40,15 @@ class UserController(
     /**
      * 로그아웃
      * - JWT 인증 필요 (Authorization: Bearer {accessToken})
-     * - Redis에서 refresh token 삭제
+     * - Redis에서 refresh token 삭제 + access token 블랙리스트 등록
      */
     @PostMapping("/logout")
-    fun logout(principal: Principal): ApiResponse<Unit> {
-        userService.logout(principal.name)   // principal.name = email (JwtAuthFilter에서 등록)
+    fun logout(
+        principal: Principal,
+        @RequestHeader("Authorization") authorization: String
+    ): ApiResponse<Unit> {
+        val accessToken = authorization.removePrefix("Bearer ").trim()
+        userService.logout(principal.name, accessToken)
         return ApiResponse.ok(Unit)
     }
 

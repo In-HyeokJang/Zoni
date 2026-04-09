@@ -8,44 +8,38 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.web.SecurityFilterChain
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
+import org.springframework.web.cors.CorsConfiguration
+import org.springframework.web.cors.CorsConfigurationSource
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource
 
 /**
  * Spring MVC 기반 Security 설정
- *
- * ※ WebFlux Security와의 차이점:
- *   - MVC: HttpSecurity, OncePerRequestFilter, SecurityFilterChain
- *   - WebFlux: ServerHttpSecurity, WebFilter, SecurityWebFilterChain
- *
- * 현재는 MVC로 구현 → 추후 service-chat, service-feed 등에 WebFlux 적용 예정
  */
 @Configuration
 class SecurityConfig(
-    private val jwtAuthFilter: JwtAuthFilter  // JWT 필터 주입
+    private val jwtAuthFilter: JwtAuthFilter
 ) {
 
     @Bean
     fun filterChain(http: HttpSecurity): SecurityFilterChain {
         http
-            .csrf { it.disable() }          // REST API는 CSRF 불필요
-            .formLogin { it.disable() }     // 폼 로그인 미사용
-            .httpBasic { it.disable() }     // Basic 인증 미사용
+            .cors { it.configurationSource(corsConfigurationSource()) }
+            .csrf { it.disable() }
+            .formLogin { it.disable() }
+            .httpBasic { it.disable() }
             .sessionManagement {
-                // JWT 사용 → 세션 완전 비활성화 (Stateless)
                 it.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             }
             .authorizeHttpRequests {
-                // 인증 없이 접근 허용할 엔드포인트
                 it.requestMatchers(
                     "/api/users/signup",
                     "/api/users/login",
-                    "/api/users/refresh",   // refresh token은 자체가 인증 수단이므로 허용
+                    "/api/users/refresh",
                     "/health",
                     "/actuator/**"
                 ).permitAll()
-                // 그 외 모든 요청은 인증 필요
                 it.anyRequest().authenticated()
             }
-            // UsernamePasswordAuthenticationFilter 앞에 JWT 필터 등록
             .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter::class.java)
 
         return http.build()
@@ -53,4 +47,25 @@ class SecurityConfig(
 
     @Bean
     fun passwordEncoder(): PasswordEncoder = BCryptPasswordEncoder()
+
+    /**
+     * CORS 설정 (로컬 개발용)
+     * 프론트엔드(React 등)에서 API 호출 허용
+     */
+    @Bean
+    fun corsConfigurationSource(): CorsConfigurationSource {
+        val config = CorsConfiguration()
+        config.allowedOrigins = listOf(
+            "http://localhost:3000",   // React 기본 포트
+            "http://localhost:3001",
+            "http://localhost:8080"
+        )
+        config.allowedMethods = listOf("GET", "POST", "PUT", "DELETE", "OPTIONS")
+        config.allowedHeaders = listOf("*")
+        config.allowCredentials = true
+
+        val source = UrlBasedCorsConfigurationSource()
+        source.registerCorsConfiguration("/**", config)
+        return source
+    }
 }
