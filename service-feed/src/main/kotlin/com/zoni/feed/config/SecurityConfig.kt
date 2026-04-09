@@ -27,8 +27,9 @@ class SecurityConfig(
             }
             .authorizeHttpRequests {
                 it.requestMatchers("/health", "/actuator/**").permitAll()
-                // 피드 목록/상세는 비로그인 허용
+                // 피드 목록/상세 조회는 비로그인도 허용
                 it.requestMatchers("GET", "/api/feeds", "/api/feeds/*").permitAll()
+                // 작성 / 수정 / 삭제 / 내피드는 JWT 인증 필요
                 it.anyRequest().authenticated()
             }
             .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter::class.java)
@@ -36,12 +37,15 @@ class SecurityConfig(
         return http.build()
     }
 
-    /** CORS 설정 (로컬 개발용) */
+    /**
+     * CORS 설정 (로컬 개발용)
+     * 프론트엔드에서 API 호출 허용 - 나중에 API Gateway 도입 시 여기서 제거
+     */
     @Bean
     fun corsConfigurationSource(): CorsConfigurationSource {
         val config = CorsConfiguration()
         config.allowedOrigins = listOf(
-            "http://localhost:3000",
+            "http://localhost:3000",   // React 기본 포트
             "http://localhost:3001",
             "http://localhost:8080"
         )
