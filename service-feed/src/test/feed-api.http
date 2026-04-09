@@ -17,7 +17,7 @@ GET http://localhost:8083/api/feeds?page=0&size=10&category=ROOM_WANTED
 # service-user 로그인 후 받은 accessToken 사용
 POST http://localhost:8083/api/feeds
 Content-Type: application/json
-Authorization: Bearer {service-user_accessToken_여기에_붙여넣기}
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJ0YXNzQHpvbmkuY29tIiwidXNlcklkIjozLCJuaWNrbmFtZSI6InRhc3MiLCJpYXQiOjE3NzU2MzEyMjEsImV4cCI6MTc3NTYzMzAyMX0.Cn2LwWhSRWiGZVuYwCngfl6GIxgejQlWILNEl-SNNgXwaAF5BKW_sBvXldccEt1b
 
 {
   "title": "강남 역세권 방 구해요",
@@ -35,7 +35,7 @@ GET http://localhost:8083/api/feeds/1
 ### 5. 피드 수정 (본인만 가능)
 PUT http://localhost:8083/api/feeds/1
 Content-Type: application/json
-Authorization: Bearer {accessToken}
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJ0YXNzQHpvbmkuY29tIiwidXNlcklkIjozLCJuaWNrbmFtZSI6InRhc3MiLCJpYXQiOjE3NzU2MzEyMjEsImV4cCI6MTc3NTYzMzAyMX0.Cn2LwWhSRWiGZVuYwCngfl6GIxgejQlWILNEl-SNNgXwaAF5BKW_sBvXldccEt1b
 
 {
   "title": "강남 역세권 방 구해요 (수정됨)",
@@ -46,14 +46,14 @@ Authorization: Bearer {accessToken}
 
 ### 6. 내 피드 목록 (JWT 필요)
 GET http://localhost:8083/api/feeds/my?page=0&size=10
-Authorization: Bearer {accessToken}
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJ0YXNzQHpvbmkuY29tIiwidXNlcklkIjozLCJuaWNrbmFtZSI6InRhc3MiLCJpYXQiOjE3NzU2MzEyMjEsImV4cCI6MTc3NTYzMzAyMX0.Cn2LwWhSRWiGZVuYwCngfl6GIxgejQlWILNEl-SNNgXwaAF5BKW_sBvXldccEt1b
 
 ###
 
 ### 7. 다른 카테고리 피드 작성
 POST http://localhost:8083/api/feeds
 Content-Type: application/json
-Authorization: Bearer {accessToken}
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJ0YXNzQHpvbmkuY29tIiwidXNlcklkIjozLCJuaWNrbmFtZSI6InRhc3MiLCJpYXQiOjE3NzU2MzEyMjEsImV4cCI6MTc3NTYzMzAyMX0.Cn2LwWhSRWiGZVuYwCngfl6GIxgejQlWILNEl-SNNgXwaAF5BKW_sBvXldccEt1b
 
 {
   "title": "동네 맛집 추천해주세요~",
@@ -65,7 +65,7 @@ Authorization: Bearer {accessToken}
 
 ### 8. 피드 삭제 (소프트 삭제 - 본인만)
 DELETE http://localhost:8083/api/feeds/1
-Authorization: Bearer {accessToken}
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJ0YXNzQHpvbmkuY29tIiwidXNlcklkIjozLCJuaWNrbmFtZSI6InRhc3MiLCJpYXQiOjE3NzU2MzEyMjEsImV4cCI6MTc3NTYzMzAyMX0.Cn2LwWhSRWiGZVuYwCngfl6GIxgejQlWILNEl-SNNgXwaAF5BKW_sBvXldccEt1b
 
 ###
 
