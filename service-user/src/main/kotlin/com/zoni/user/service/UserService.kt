@@ -28,7 +28,7 @@ class UserService(
             throw ZoniException(ErrorCode.DUPLICATE_EMAIL)
         }
         val user = User(
-            email = request.email,
+            email    = request.email,
             password = passwordEncoder.encode(request.password),
             nickname = request.nickname
         )
@@ -39,7 +39,7 @@ class UserService(
         val user = userRepository.findByEmail(request.email)
             .orElseThrow { ZoniException(ErrorCode.USER_NOT_FOUND) }
 
-        if (!passwordEncoder.matches(request.password, user.password)) {
+        if (!passwordEncoder.matches(request.password, user.password ?: throw ZoniException(ErrorCode.UNAUTHORIZED))) {
             throw ZoniException(ErrorCode.UNAUTHORIZED)
         }
 
@@ -115,10 +115,12 @@ class UserService(
         val user = userRepository.findByEmail(email)
             .orElseThrow { ZoniException(ErrorCode.USER_NOT_FOUND) }
         return UserResponse(
-            userId   = user.id,
-            email    = user.email,
-            nickname = user.nickname,
-            role     = user.role.name
+            userId           = user.id,
+            email            = user.email,
+            nickname         = user.nickname,
+            role             = user.role.name,
+            profileImageUrl  = user.profileImageUrl,
+            oauthProvider    = user.oauthProvider?.name
         )
     }
 }
