@@ -50,11 +50,13 @@ class UserService(
         refreshTokenService.save(user.id, refreshToken)
 
         return LoginResponse(
-            accessToken = accessToken,
-            refreshToken = refreshToken,
-            userId = user.id,
-            email = user.email,
-            nickname = user.nickname
+            accessToken      = accessToken,
+            refreshToken     = refreshToken,
+            userId           = user.id,
+            email            = user.email,
+            nickname         = user.nickname,
+            profileImageUrl  = user.profileImageUrl,
+            oauthProvider    = user.oauthProvider?.name
         )
     }
 
@@ -89,11 +91,13 @@ class UserService(
         refreshTokenService.save(userId, newRefreshToken)
 
         return LoginResponse(
-            accessToken  = newAccessToken,
-            refreshToken = newRefreshToken,
-            userId       = user.id,
-            email        = user.email,
-            nickname     = user.nickname
+            accessToken      = newAccessToken,
+            refreshToken     = newRefreshToken,
+            userId           = user.id,
+            email            = user.email,
+            nickname         = user.nickname,
+            profileImageUrl  = user.profileImageUrl,
+            oauthProvider    = user.oauthProvider?.name
         )
     }
 
