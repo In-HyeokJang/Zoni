@@ -10,6 +10,9 @@ data class FeedUpdateRequest(
     @field:Size(max = 200, message = "제목은 200자 이하로 입력해주세요.")
     val title: String?,
 
-    val content: String?
-)
+    val content: String?,
 
+    /** 대표 이미지 URL 수정 (null이면 변경 안함) */
+    @field:Size(max = 500, message = "이미지 URL은 500자 이하여야 합니다.")
+    val imageUrl: String? = null
+)

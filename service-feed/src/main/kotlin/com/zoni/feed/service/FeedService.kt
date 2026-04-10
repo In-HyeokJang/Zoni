@@ -60,7 +60,9 @@ class FeedService(
             nickname = nickname,
             title    = request.title,
             content  = request.content,
-            category = request.category
+            category = request.category,
+            placeId  = request.placeId,
+            imageUrl = request.imageUrl
         )
         return feedRepository.save(feed).toResponse()
     }
@@ -74,8 +76,9 @@ class FeedService(
             throw ZoniException(ErrorCode.FORBIDDEN)
         }
 
-        request.title?.let   { feed.title   = it }
-        request.content?.let { feed.content = it }
+        request.title?.let    { feed.title    = it }
+        request.content?.let  { feed.content  = it }
+        request.imageUrl?.let { feed.imageUrl = it }
         feed.updatedAt = LocalDateTime.now()
 
         return feed.toResponse()
@@ -123,6 +126,8 @@ class FeedService(
         title      = title,
         content    = content,
         category   = category.name,
+        placeId    = placeId,
+        imageUrl   = imageUrl,
         viewCount  = viewCount,
         likeCount  = likeCount,
         createdAt  = createdAt,
@@ -135,6 +140,8 @@ class FeedService(
         nickname  = nickname,
         title     = title,
         category  = category.name,
+        placeId   = placeId,
+        imageUrl  = imageUrl,
         viewCount = viewCount,
         likeCount = likeCount,
         createdAt = createdAt

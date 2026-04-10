@@ -10,9 +10,10 @@ data class FeedResponse(
     val title: String,
     val content: String,
     val category: String,
+    val placeId: Long?,       // 연관 장소 ID (Phase 2 연동)
+    val imageUrl: String?,    // 대표 이미지 URL
     val viewCount: Int,
     val likeCount: Int,
     val createdAt: LocalDateTime,
     val updatedAt: LocalDateTime
 )
-

@@ -8,80 +8,108 @@ GET http://localhost:8083/api/feeds?page=0&size=10
 
 ###
 
-### 2. 카테고리 필터 조회 (방 구해요만)
-GET http://localhost:8083/api/feeds?page=0&size=10&category=ROOM_WANTED
+### 2. 카테고리 필터 조회 (핫플 후기만)
+GET http://localhost:8083/api/feeds?page=0&size=10&category=REVIEW
 
 ###
 
-### 3. 피드 작성 (로그인 후 accessToken 붙여넣기)
-# service-user 로그인 후 받은 accessToken 사용
+### 3. 피드 작성 - 핫플 후기 (로그인 후 accessToken 붙여넣기)
 POST http://localhost:8083/api/feeds
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJ0YXNzQHpvbmkuY29tIiwidXNlcklkIjozLCJuaWNrbmFtZSI6InRhc3MiLCJpYXQiOjE3NzU2MzEyMjEsImV4cCI6MTc3NTYzMzAyMX0.Cn2LwWhSRWiGZVuYwCngfl6GIxgejQlWILNEl-SNNgXwaAF5BKW_sBvXldccEt1b
+Authorization: Bearer {accessToken}
 
 {
-  "title": "강남 역세권 방 구해요",
-  "content": "강남역 도보 5분 이내 원룸 구합니다. 예산 80만원 이내 구해요!",
-  "category": "ROOM_WANTED"
+  "title": "성수동 카페 완전 핫함 ☕",
+  "content": "성수역 도보 5분! 분위기 미쳤고 커피도 맛있어요. 주말엔 웨이팅 각오하세요!",
+  "category": "REVIEW",
+  "placeId": null,
+  "imageUrl": null
 }
 
 ###
 
-### 4. 피드 상세 조회 (조회수 +1 확인)
+### 4. 피드 작성 - 당일 코스 공유
+POST http://localhost:8083/api/feeds
+Content-Type: application/json
+Authorization: Bearer {accessToken}
+
+{
+  "title": "성수→홍대 당일 데이트 코스 🗺️",
+  "content": "오전 성수 카페 → 점심 서울숲 피크닉 → 오후 홍대 팝업스토어 → 저녁 연남동 맛집 코스입니다!",
+  "category": "COURSE",
+  "placeId": null,
+  "imageUrl": null
+}
+
+###
+
+### 5. 피드 상세 조회 (조회수 +1 확인)
 GET http://localhost:8083/api/feeds/1
 
 ###
 
-### 5. 피드 수정 (본인만 가능)
+### 6. 피드 수정 (본인만 가능)
 PUT http://localhost:8083/api/feeds/1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJ0YXNzQHpvbmkuY29tIiwidXNlcklkIjozLCJuaWNrbmFtZSI6InRhc3MiLCJpYXQiOjE3NzU2MzEyMjEsImV4cCI6MTc3NTYzMzAyMX0.Cn2LwWhSRWiGZVuYwCngfl6GIxgejQlWILNEl-SNNgXwaAF5BKW_sBvXldccEt1b
+Authorization: Bearer {accessToken}
 
 {
-  "title": "강남 역세권 방 구해요 (수정됨)",
-  "content": "예산 90만원으로 올렸습니다. 풀옵션 선호!"
+  "title": "성수동 카페 완전 핫함 ☕ (수정됨)",
+  "content": "재방문했는데 여전히 맛있어요! 평일 오전이 제일 여유롭네요.",
+  "imageUrl": null
 }
 
 ###
 
-### 6. 내 피드 목록 (JWT 필요)
+### 7. 내 피드 목록 (JWT 필요)
 GET http://localhost:8083/api/feeds/my?page=0&size=10
-Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJ0YXNzQHpvbmkuY29tIiwidXNlcklkIjozLCJuaWNrbmFtZSI6InRhc3MiLCJpYXQiOjE3NzU2MzEyMjEsImV4cCI6MTc3NTYzMzAyMX0.Cn2LwWhSRWiGZVuYwCngfl6GIxgejQlWILNEl-SNNgXwaAF5BKW_sBvXldccEt1b
+Authorization: Bearer {accessToken}
 
 ###
 
-### 7. 다른 카테고리 피드 작성
+### 8. 커뮤니티 피드 작성
 POST http://localhost:8083/api/feeds
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJ0YXNzQHpvbmkuY29tIiwidXNlcklkIjozLCJuaWNrbmFtZSI6InRhc3MiLCJpYXQiOjE3NzU2MzEyMjEsImV4cCI6MTc3NTYzMzAyMX0.Cn2LwWhSRWiGZVuYwCngfl6GIxgejQlWILNEl-SNNgXwaAF5BKW_sBvXldccEt1b
+Authorization: Bearer {accessToken}
 
 {
-  "title": "동네 맛집 추천해주세요~",
-  "content": "강남 근처 가성비 좋은 점심 맛집 알려주세요!",
+  "title": "혼자 여행 처음인데 어디가 좋을까요?",
+  "content": "20대 중반 혼자 여행 계획 중인데 국내 추천 장소 있으면 알려주세요!",
   "category": "COMMUNITY"
 }
 
 ###
 
-### 8. 피드 삭제 (소프트 삭제 - 본인만)
+### 9. 피드 삭제 (소프트 삭제 - 본인만)
 DELETE http://localhost:8083/api/feeds/1
-Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJ0YXNzQHpvbmkuY29tIiwidXNlcklkIjozLCJuaWNrbmFtZSI6InRhc3MiLCJpYXQiOjE3NzU2MzEyMjEsImV4cCI6MTc3NTYzMzAyMX0.Cn2LwWhSRWiGZVuYwCngfl6GIxgejQlWILNEl-SNNgXwaAF5BKW_sBvXldccEt1b
+Authorization: Bearer {accessToken}
 
 ###
 
-### 9. 삭제된 피드 조회 → 404 응답 확인
+### 10. 삭제된 피드 조회 → 404 응답 확인
 GET http://localhost:8083/api/feeds/1
 
 ###
 
-### 10. 권한 없이 피드 작성 시도 → 403 응답 확인
+### 11. 권한 없이 피드 작성 시도 → 403 응답 확인
 POST http://localhost:8083/api/feeds
 Content-Type: application/json
 
 {
   "title": "토큰 없이 작성 시도",
   "content": "이건 실패해야 함",
-  "category": "QNA"
+  "category": "COMMUNITY"
 }
 
+###
 
+### 12. 잘못된 카테고리 → 400 응답 확인
+POST http://localhost:8083/api/feeds
+Content-Type: application/json
+Authorization: Bearer {accessToken}
+
+{
+  "title": "테스트",
+  "content": "잘못된 카테고리",
+  "category": "ROOM_WANTED"
+}

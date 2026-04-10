@@ -9,8 +9,9 @@ data class FeedSummaryResponse(
     val nickname: String,
     val title: String,
     val category: String,
+    val placeId: Long?,       // 연관 장소 ID
+    val imageUrl: String?,    // 대표 이미지 URL (썸네일)
     val viewCount: Int,
     val likeCount: Int,
     val createdAt: LocalDateTime
 )
-
