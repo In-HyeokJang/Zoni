@@ -1,8 +1,8 @@
-ㅣㄴspring:
+spring:
   application:
     name: service-feed
   profiles:
-한ㄱ    active: local
+    active: local
 
 server:
   port: 8083
