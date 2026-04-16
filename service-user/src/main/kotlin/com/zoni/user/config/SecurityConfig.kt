@@ -34,6 +34,8 @@ class SecurityConfig(
                 it.requestMatchers(
                     "/api/users/signup",
                     "/api/users/login",
+                    "/api/users/login/kakao",
+                    "/api/users/login/kakao/callback",  // 로컬 테스트용 콜백
                     "/api/users/refresh",
                     "/health",
                     "/actuator/**"
@@ -47,6 +49,7 @@ class SecurityConfig(
 
     @Bean
     fun passwordEncoder(): PasswordEncoder = BCryptPasswordEncoder()
+
 
     /**
      * CORS 설정 (로컬 개발용)

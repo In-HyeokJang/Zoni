@@ -26,6 +26,11 @@ dependencies {
     runtimeOnly("io.jsonwebtoken:jjwt-impl:0.12.5")
     runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.12.5")
 
+
     // 공통 모듈
     implementation(project(":module-common"))
+
+    // Test 의존성
+    testImplementation("com.h2database:h2")
+    testImplementation("org.mockito.kotlin:mockito-kotlin:5.1.0")
 }
