@@ -15,6 +15,7 @@ import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpMethod
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import org.springframework.util.LinkedMultiValueMap
 import org.springframework.web.client.RestTemplate
 
@@ -39,7 +40,11 @@ class KakaoOAuthService(
     private val restApiKey: String,
 
     @Value("\${kakao.redirect-uri}")
-    private val redirectUri: String
+    private val redirectUri: String,
+
+    @Value("\${kakao.client-secret}")
+    private val clientSecret: String
+
 ) {
 
     private val log = LoggerFactory.getLogger(javaClass)
@@ -94,6 +99,7 @@ class KakaoOAuthService(
             add("client_id",    restApiKey)
             add("redirect_uri", redirectUri)
             add("code",         code)
+            add("client_secret", clientSecret)
         }
 
         return runCatching {
@@ -144,7 +150,8 @@ class KakaoOAuthService(
      * Case 2. 이메일로 조회 → 이메일 로그인 계정이 있으면 카카오 연동
      * Case 3. 둘 다 없으면 신규 자동 가입
      */
-    private fun findOrCreateUser(userInfo: KakaoUserInfoResponse): User {
+    @Transactional
+    fun findOrCreateUser(userInfo: KakaoUserInfoResponse): User {
         val oauthId  = userInfo.id.toString()
         val email    = userInfo.getEmail() ?: "$oauthId@kakao.local"
         val nickname = userInfo.getNickname()
