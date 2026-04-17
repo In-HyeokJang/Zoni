@@ -3,3 +3,6 @@ spring:
     name: service-feed
   profiles:
     active: local
+
+server:
+  port: 8083

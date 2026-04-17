@@ -5,6 +5,9 @@ build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 
+# 로컬 환경 설정 (Java 경로 등 개인 설정 포함)
+gradle.properties
+
 ### STS ###
 .apt_generated
 .classpath
@@ -39,5 +42,8 @@ out/
 ### Kotlin ###
 .kotlin
 
-### yml ###
-.yml
+### 민감정보 설정 파일 (절대 커밋 금지!) ###
+**/application-local.yml
+
+### Claude Code (개인용, 팀 공유 안 함) ###
+CLAUDE.md

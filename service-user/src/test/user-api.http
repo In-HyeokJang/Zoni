@@ -1,0 +1,104 @@
+## ================================================================
+## ZONI User Service - API 테스트
+## IntelliJ HTTP Client로 직접 실행 가능
+## 서버 실행 후 ▶ 버튼 클릭해서 테스트
+## ================================================================
+
+### ✅ 1. 헬스체크 (서버 실행 확인)
+GET http://localhost:8081/health
+
+###
+
+### ✅ 2. 회원가입
+POST http://localhost:8081/api/users/signup
+Content-Type: application/json
+
+{
+  "email": "tass@zoni.com",
+  "password": "1234",
+  "nickname": "tass"
+}
+
+###
+
+### ✅ 3. 로그인 (accessToken + refreshToken 발급)
+POST http://localhost:8081/api/users/login
+Content-Type: application/json
+
+{
+  "email": "tass@zoni.com",
+  "password": "1234"
+}
+
+###
+
+### ✅ 4. 내 정보 조회
+# 3번 로그인 응답의 accessToken 복사 후 Bearer 뒤에 붙여넣기
+GET http://localhost:8081/api/users/me
+Authorization: Bearer {{accessToken}}
+
+###
+
+### ✅ 5. Access Token 재발급 (Token Rotation)
+# 3번 로그인 응답의 refreshToken 복사 후 붙여넣기
+POST http://localhost:8081/api/users/refresh
+Content-Type: application/json
+
+{
+  "refreshToken": "{{refreshToken}}"
+}
+
+###
+
+### ✅ 6. 로그아웃
+# 3번 로그인 응답의 accessToken 복사 후 붙여넣기
+POST http://localhost:8081/api/users/logout
+Authorization: Bearer {{accessToken}}
+
+###
+
+### ✅ 7. 중복 이메일 테스트 (409 응답 확인)
+POST http://localhost:8081/api/users/signup
+Content-Type: application/json
+
+{
+  "email": "tass@zoni.com",
+  "password": "1234",
+  "nickname": "tass"
+}
+
+###
+
+### ✅ 8. 잘못된 비밀번호 테스트 (401 응답 확인)
+POST http://localhost:8081/api/users/login
+Content-Type: application/json
+
+{
+  "email": "tass@zoni.com",
+  "password": "wrongpassword"
+}
+
+###
+
+### ✅ 9. 없는 사용자 로그인 테스트 (404 응답 확인)
+POST http://localhost:8081/api/users/login
+Content-Type: application/json
+
+{
+  "email": "notexist@zoni.com",
+  "password": "1234"
+}
+
+###
+
+### 🔵 10. 카카오 OAuth 로그인 (POST - 프론트 연동용)
+# https://kauth.kakao.com/oauth/authorize?client_id=UOUR_REST_API_KEY&redirect_uri=http://localhost:8081/login/oauth2/code/kakao&response_type=code
+# 프론트에서 인가코드를 직접 전달할 때 사용
+POST http://localhost:8081/api/users/login/kakao
+Content-Type: application/json
+
+{
+  "code": "4Pfk0YZJdHRX358zN8A6l776BIVGt5gbd3sH02HNLcvKAV470WolyAAAAAQKFxZiAAABnXZwOyCSBpCp5rpDbg"
+}
+
+

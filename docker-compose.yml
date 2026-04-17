@@ -4,11 +4,12 @@ services:
     image: mysql:8.3
     environment:
       MYSQL_ROOT_PASSWORD: zoni1234
-      MYSQL_DATABASE: zoni_user
+      MYSQL_DATABASE: zoni_user          # 기본 DB (init.sql에서 추가 DB 생성)
     ports:
       - "3306:3306"
     volumes:
       - mysql_data:/var/lib/mysql
+      - ./docker/init.sql:/docker-entrypoint-initdb.d/init.sql  # 최초 실행 시 자동 실행
 
   redis:
     image: redis:7.2
