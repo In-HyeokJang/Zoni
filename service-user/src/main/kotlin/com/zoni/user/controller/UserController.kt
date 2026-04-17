@@ -37,7 +37,7 @@ class UserController(
      * - refresh token이 만료되거나 Redis에 없으면 401 반환
      */
     @PostMapping("/refresh")
-    fun refresh(@RequestBody request: TokenRefreshRequest): ApiResponse<LoginResponse> =
+    fun refresh(@Valid @RequestBody request: TokenRefreshRequest): ApiResponse<LoginResponse> =
         ApiResponse.ok(userService.refresh(request))
 
     /**
