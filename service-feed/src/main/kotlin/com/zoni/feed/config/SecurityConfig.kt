@@ -28,7 +28,8 @@ class SecurityConfig(
             .authorizeHttpRequests {
                 it.requestMatchers("/health", "/actuator/**").permitAll()
                 // 피드 목록/상세 조회는 비로그인도 허용
-                it.requestMatchers("GET", "/api/feeds", "/api/feeds/*").permitAll()
+                it.requestMatchers("GET", "/api/feeds").permitAll()
+                it.requestMatchers("GET", "/api/feeds/{id:[0-9]+}").permitAll()
                 // 작성 / 수정 / 삭제 / 내피드는 JWT 인증 필요
                 it.anyRequest().authenticated()
             }
