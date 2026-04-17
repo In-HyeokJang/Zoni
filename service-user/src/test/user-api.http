@@ -35,7 +35,8 @@ Content-Type: application/json
 ### ✅ 4. 내 정보 조회
 # 3번 로그인 응답의 accessToken 복사 후 Bearer 뒤에 붙여넣기
 GET http://localhost:8081/api/users/me
-Authorization: Bearer {{accessToken}}
+# Authorization: Bearer {{accessToken}}
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiI0ODUxNDMzNjYyQGtha2FvLmxvY2FsIiwidXNlcklkIjoyLCJuaWNrbmFtZSI6IuyepeyduO2YgSIsImlhdCI6MTc3NjQyMjcxOCwiZXhwIjoxNzc2NDI0NTE4fQ.zXs3fJ52j76KR42mwWLbrLddIPZlSVurP996f0f5Fi1Y34PQwf2bTCeYmOoHO-8I
 
 ###
 
@@ -91,14 +92,18 @@ Content-Type: application/json
 
 ###
 
-### 🔵 10. 카카오 OAuth 로그인 (POST - 프론트 연동용)
-# https://kauth.kakao.com/oauth/authorize?client_id=UOUR_REST_API_KEY&redirect_uri=http://localhost:8081/login/oauth2/code/kakao&response_type=code
-# 프론트에서 인가코드를 직접 전달할 때 사용
+### 🔵 카카오 OAuth - Step 1: 브라우저에서 아래 URL 접속해서 code 받기
+# 아래 URL을 브라우저 주소창에 직접 붙여넣기
+# https://kauth.kakao.com/oauth/authorize?client_id=c452ba4cdeb3a1d31ea5a1b17703e2db&redirect_uri=http://localhost:8081/api/users/login/kakao/callback&response_type=code
+#
+# 로그인 후 리다이렉트 된 URL에서 code= 뒤 값을 복사
+# 예: http://localhost:8081/api/users/login/kakao/callback?code=여기값복사
+
+### 🔵 카카오 OAuth - Step 2: 복사한 code로 로그인 요청
 POST http://localhost:8081/api/users/login/kakao
 Content-Type: application/json
 
 {
-  "code": "4Pfk0YZJdHRX358zN8A6l776BIVGt5gbd3sH02HNLcvKAV470WolyAAAAAQKFxZiAAABnXZwOyCSBpCp5rpDbg"
+  "code": "여기에_브라우저에서_복사한_code_붙여넣기"
 }
-
 
