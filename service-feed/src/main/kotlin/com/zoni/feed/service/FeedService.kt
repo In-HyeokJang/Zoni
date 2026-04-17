@@ -117,7 +117,7 @@ class FeedService(
     private fun findActiveFeed(id: Long): Feed =
         feedRepository.findById(id)
             .filter { !it.isDeleted }
-            .orElseThrow { ZoniException(ErrorCode.NOT_FOUND) }
+            .orElseThrow { ZoniException(ErrorCode.FEED_NOT_FOUND) }
 
     private fun Feed.toResponse() = FeedResponse(
         id         = id,
