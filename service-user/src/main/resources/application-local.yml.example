@@ -34,4 +34,5 @@ jwt:
 # [내 애플리케이션] → [카카오 로그인] → [Redirect URI] 등록
 kakao:
   rest-api-key: YOUR_KAKAO_REST_API_KEY
-  redirect-uri: http://localhost:8081/login/oauth2/code/kakao
+  redirect-uri: http://localhost:8081/api/users/login/kakao/callback
+  client-secret: YOUR_KAKAO_CLIENT_SECRET  # 카카오 콘솔 → [보안] → Client Secret (선택사항이지만 등록 시 필수)
