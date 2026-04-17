@@ -5,7 +5,6 @@ import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.security.Keys
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
-import java.util.Date
 
 /**
  * service-feed 전용 JWT Provider
@@ -16,8 +15,7 @@ import java.util.Date
  */
 @Component
 class JwtProvider(
-    @Value("\${jwt.secret}") private val secret: String,
-    @Value("\${jwt.access-token-expire}") private val expiration: Long
+    @Value("\${jwt.secret}") private val secret: String
 ) {
     private val key by lazy {
         Keys.hmacShaKeyFor(secret.toByteArray())
