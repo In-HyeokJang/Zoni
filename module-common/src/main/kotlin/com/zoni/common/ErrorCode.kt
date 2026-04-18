@@ -29,6 +29,8 @@ enum class ErrorCode(
 
     // ── Place ─────────────────────────────────────────
     PLACE_NOT_FOUND(404, "장소를 찾을 수 없습니다."),
+    PLACE_ALREADY_SAVED(409, "이미 저장한 장소입니다."),
+    KAKAO_MAP_API_ERROR(502, "장소 검색 중 오류가 발생했습니다."),
 
     // ── Common ────────────────────────────────────────
     BAD_REQUEST(400, "잘못된 요청입니다."),
