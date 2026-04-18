@@ -1,0 +1,79 @@
+## ================================================================
+## ZONI Place Service - API 테스트
+## IntelliJ HTTP Client로 직접 실행 가능
+## 서버 실행 후 ▶ 버튼 클릭해서 테스트
+## ================================================================
+
+### ✅ 1. 헬스체크
+GET http://localhost:8084/health
+
+###
+
+### ✅ 2. 장소 키워드 검색 (비로그인, 카카오 API)
+GET http://localhost:8084/api/places/search?keyword=홍대&page=1&size=5
+
+###
+
+### ✅ 3. 장소 검색 + 현재 위치 기반 (거리순 정렬)
+# 서울 시청 기준 반경 5km
+GET http://localhost:8084/api/places/search?keyword=카페&x=126.9784&y=37.5665&page=1&size=5
+
+###
+
+### ✅ 4. 장소 저장 (JWT 필요 - 1번 로그인 후 accessToken 복사)
+POST http://localhost:8084/api/places
+Content-Type: application/json
+# Authorization: Bearer {{accessToken}}
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJ0YXNzQHpvbmkuY29tIiwidXNlcklkIjoxLCJuaWNrbmFtZSI6InRhc3MiLCJpYXQiOjE3NzY0OTU4OTEsImV4cCI6MTc3NjQ5NzY5MX0.b6eoTIeKFEDDMsOtnlOykwqoou_Nu9gJgCI35ek_n8LESYu_miZSREVyyhza2aZr
+
+{
+  "kakaoPlaceId": "26338954",
+  "name": "카카오 판교아지트",
+  "category": "IT,인터넷 > IT기업",
+  "address": "경기 성남시 분당구 삼평동 683",
+  "roadAddress": "경기 성남시 분당구 판교역로 235",
+  "phone": "02-1234-5678",
+  "placeUrl": "http://place.map.kakao.com/26338954",
+  "x": 127.10498,
+  "y": 37.40269
+}
+
+###
+
+### ✅ 5. 인기 장소 목록 (비로그인, Redis 캐시)
+GET http://localhost:8084/api/places/popular?size=10
+
+###
+
+### ✅ 6. 저장된 장소 상세 조회 (비로그인)
+GET http://localhost:8084/api/places/1
+
+###
+
+### ✅ 7. 내가 저장한 장소 목록 (JWT 필요)
+GET http://localhost:8084/api/places/my?page=0&size=10
+# Authorization: Bearer {{accessToken}}
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJ0YXNzQHpvbmkuY29tIiwidXNlcklkIjoxLCJuaWNrbmFtZSI6InRhc3MiLCJpYXQiOjE3NzY0OTU4OTEsImV4cCI6MTc3NjQ5NzY5MX0.b6eoTIeKFEDDMsOtnlOykwqoou_Nu9gJgCI35ek_n8LESYu_miZSREVyyhza2aZr
+###
+
+### ✅ 8. 장소 삭제 (JWT + 본인)
+DELETE http://localhost:8084/api/places/1
+# Authorization: Bearer {{accessToken}}
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJ0YXNzQHpvbmkuY29tIiwidXNlcklkIjoxLCJuaWNrbmFtZSI6InRhc3MiLCJpYXQiOjE3NzY0OTU4OTEsImV4cCI6MTc3NjQ5NzY5MX0.b6eoTIeKFEDDMsOtnlOykwqoou_Nu9gJgCI35ek_n8LESYu_miZSREVyyhza2aZr
+###
+
+### ✅ 9. 중복 저장 테스트 (409 응답 확인)
+POST http://localhost:8084/api/places
+Content-Type: application/json
+# Authorization: Bearer {{accessToken}}
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJ0YXNzQHpvbmkuY29tIiwidXNlcklkIjoxLCJuaWNrbmFtZSI6InRhc3MiLCJpYXQiOjE3NzY0OTU4OTEsImV4cCI6MTc3NjQ5NzY5MX0.b6eoTIeKFEDDMsOtnlOykwqoou_Nu9gJgCI35ek_n8LESYu_miZSREVyyhza2aZr
+
+{
+  "kakaoPlaceId": "26338954",
+  "name": "카카오 판교아지트",
+  "category": "IT,인터넷 > IT기업",
+  "address": "경기 성남시 분당구 삼평동 683",
+  "roadAddress": "경기 성남시 분당구 판교역로 235",
+  "x": 127.10498,
+  "y": 37.40269
+}

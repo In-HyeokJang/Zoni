@@ -1,0 +1,42 @@
+# ============================================================
+# application-local.yml 설정 예시
+# 이 파일을 복사해서 application-local.yml 로 만들고
+# 실제 값으로 채워서 사용하세요.
+# application-local.yml 은 .gitignore 에 등록되어 있어 커밋되지 않습니다.
+# ============================================================
+
+server:
+  port: 8084  # service-user: 8081, service-feed: 8083, service-place: 8084
+
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/zoni_place?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    username: root
+    password: YOUR_MYSQL_PASSWORD
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+  data:
+    redis:
+      host: localhost
+      port: 6379
+
+# JWT 검증용 설정 (service-user와 동일한 secret 사용)
+jwt:
+  secret: YOUR_JWT_SECRET_SAME_AS_SERVICE_USER
+  access-token-expire: 1800000
+
+# 카카오 로컬 API (장소 검색)
+# 카카오 개발자 콘솔 → [내 애플리케이션] → [앱 키] → REST API 키
+kakao:
+  rest-api-key: YOUR_KAKAO_REST_API_KEY
+
+# Redis 캐싱 TTL 설정 (초 단위)
+cache:
+  search-ttl: 3600    # 검색 결과 캐시: 1시간
+  popular-ttl: 1800   # 인기 장소 캐시: 30분
