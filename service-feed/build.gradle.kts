@@ -26,6 +26,9 @@ dependencies {
     // Redis (access token 블랙리스트 확인)
     implementation("org.springframework.boot:spring-boot-starter-data-redis")
 
+    // Kafka (피드 이벤트 발행)
+    implementation("org.springframework.kafka:spring-kafka")
+
     // 공통 모듈 (ApiResponse, ErrorCode, ZoniException, JwtPrincipal)
     implementation(project(":module-common"))
 }
