@@ -22,5 +22,11 @@ spring:
 # JWT 검증용 설정 (service-user와 동일한 secret 사용 → 동일 토큰 검증 가능)
 jwt:
   secret: zoni-super-secret-key-must-be-at-least-32-characters-long!
-  access-token-expire: 1800000    # 30분 (ms)
-  refresh-token-expire: 604800000 # 7일 (ms)
+  access-token-expire: 1800000
+  refresh-token-expire: 604800000
+
+spring.kafka:
+  bootstrap-servers: localhost:9092
+  producer:
+    key-serializer: org.apache.kafka.common.serialization.StringSerializer
+    value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
