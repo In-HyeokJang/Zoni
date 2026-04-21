@@ -27,6 +27,9 @@ enum class ErrorCode(
     FEED_NOT_FOUND(404, "피드를 찾을 수 없습니다."),
     FEED_ALREADY_DELETED(400, "이미 삭제된 피드입니다."),
 
+    // ── Notify ────────────────────────────────────────
+    NOTIFICATION_NOT_FOUND(404, "알림을 찾을 수 없습니다."),
+
     // ── Place ─────────────────────────────────────────
     PLACE_NOT_FOUND(404, "장소를 찾을 수 없습니다."),
     PLACE_ALREADY_SAVED(409, "이미 저장한 장소입니다."),

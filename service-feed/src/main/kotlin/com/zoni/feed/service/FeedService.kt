@@ -9,6 +9,8 @@ import com.zoni.feed.dto.request.FeedUpdateRequest
 import com.zoni.feed.dto.response.FeedPageResponse
 import com.zoni.feed.dto.response.FeedResponse
 import com.zoni.feed.dto.response.FeedSummaryResponse
+import com.zoni.feed.event.FeedCreatedEvent
+import com.zoni.feed.event.FeedEventPublisher
 import com.zoni.feed.repository.FeedRepository
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
@@ -19,7 +21,8 @@ import java.time.LocalDateTime
 @Service
 @Transactional(readOnly = true)
 class FeedService(
-    private val feedRepository: FeedRepository
+    private val feedRepository: FeedRepository,
+    private val feedEventPublisher: FeedEventPublisher
 ) {
 
     /** 피드 목록 조회 (비로그인 가능 / 카테고리 필터 선택) */
@@ -64,7 +67,17 @@ class FeedService(
             placeId  = request.placeId,
             imageUrl = request.imageUrl
         )
-        return feedRepository.save(feed).toResponse()
+        return feedRepository.save(feed).also {
+            feedEventPublisher.publishFeedCreated(
+                FeedCreatedEvent(
+                    feedId   = it.id,
+                    userId   = it.userId,
+                    nickname = it.nickname,
+                    title    = it.title,
+                    category = it.category.name
+                )
+            )
+        }.toResponse()
     }
 
     /** 피드 수정 (JWT 인증 + 본인만 가능) */
