@@ -14,9 +14,9 @@ POST http://localhost:8081/api/users/signup
 Content-Type: application/json
 
 {
-  "email": "tass@zoni.com",
+  "email": "jay_a@zoni.com",
   "password": "1234",
-  "nickname": "tass"
+  "nickname": "jay"
 }
 
 ###
@@ -36,7 +36,8 @@ Content-Type: application/json
 # 3번 로그인 응답의 accessToken 복사 후 Bearer 뒤에 붙여넣기
 GET http://localhost:8081/api/users/me
 # Authorization: Bearer {{accessToken}}
-Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiI0ODUxNDMzNjYyQGtha2FvLmxvY2FsIiwidXNlcklkIjoyLCJuaWNrbmFtZSI6IuyepeyduO2YgSIsImlhdCI6MTc3NjQyMjcxOCwiZXhwIjoxNzc2NDI0NTE4fQ.zXs3fJ52j76KR42mwWLbrLddIPZlSVurP996f0f5Fi1Y34PQwf2bTCeYmOoHO-8I
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJ0YXNzQHpvbmkuY29tIiwidXNlcklkIjoxLCJuaWNrbmFtZSI6InRhc3MiLCJpYXQiOjE3Nzc0NDMyOTksImV4cCI6MTc3NzQ0NTA5OX0.Qz3RFitxO8wA34KTIn32eBNjzMZqKmnVac9DFIiJ3royWn8yvUc-69rpNSdpiuWq
+# eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJqYXlAem9uaS5jb20iLCJ1c2VySWQiOjMsIm5pY2tuYW1lIjoiamF5IiwiaWF0IjoxNzc3NDQzMjg5LCJleHAiOjE3Nzc0NDUwODl9.uDfx85TFf6kXHH97a6w5Sa0Dp_CYwu-u15GFLbZ_CGoKf3rDR1aqhZt6RfGWAn4q
 
 ###
 

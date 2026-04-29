@@ -1,22 +1,38 @@
-### 0. 헬스체크 (서버 실행 확인)
+## ================================================================
+## ZONI Feed Service - API 테스트
+## IntelliJ HTTP Client로 직접 실행 (▶ 버튼)
+##
+## [실행 순서]
+## 1. docker-compose up -d          (MySQL, Redis, Kafka)
+## 2. service-user 실행 (8081)      (로그인 토큰 발급용)
+## 3. service-feed 실행 (8083)
+## 4. service-notify 실행 (8087)    (Kafka 알림 연동 확인 시)
+##
+## [토큰 사용법]
+## user-api.http에서 로그인 후 응답의 accessToken을 복사해서
+## Authorization: Bearer 뒤에 붙여넣기
+## ================================================================
+
+### ✅ 0. 헬스체크 (서버 실행 확인)
 GET http://localhost:8083/health
 
 ###
 
-### 1. 피드 목록 조회 (비로그인 가능)
+### ✅ 1. 피드 목록 조회 (비로그인 가능)
 GET http://localhost:8083/api/feeds?page=0&size=10
 
 ###
 
-### 2. 카테고리 필터 조회 (핫플 후기만)
+### ✅ 2. 카테고리 필터 조회
 GET http://localhost:8083/api/feeds?page=0&size=10&category=REVIEW
 
 ###
 
-### 3. 피드 작성 - 핫플 후기 (로그인 후 accessToken 붙여넣기)
+### ✅ 3. 피드 작성 - 핫플 후기 (로그인 후 accessToken 사용)
 POST http://localhost:8083/api/feeds
 Content-Type: application/json
-Authorization: Bearer {accessToken}
+# Authorization: Bearer {accessToken}
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJ0YXNzQHpvbmkuY29tIiwidXNlcklkIjoxLCJuaWNrbmFtZSI6InRhc3MiLCJpYXQiOjE3NzcxOTI5NjAsImV4cCI6MTc3NzE5NDc2MH0.tNHR2DJf2h0sDSJr1I7IjMs7UgMntI-_M6aXh--uJtu90b9ZrLLkpg8il0rkAuqi
 
 {
   "title": "성수동 카페 완전 핫함 ☕",
@@ -28,10 +44,11 @@ Authorization: Bearer {accessToken}
 
 ###
 
-### 4. 피드 작성 - 당일 코스 공유
+### ✅ 4. 피드 작성 - 당일 코스 공유
 POST http://localhost:8083/api/feeds
 Content-Type: application/json
-Authorization: Bearer {accessToken}
+# Authorization: Bearer {accessToken}
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJ0YXNzQHpvbmkuY29tIiwidXNlcklkIjoxLCJuaWNrbmFtZSI6InRhc3MiLCJpYXQiOjE3NzcxOTE2MDAsImV4cCI6MTc3NzE5MzQwMH0.A7s0nYmJcvCprixHX4QyLA4APT4KMq20ZGuSp38PYLIJEdjumML11ki2aCROj2NS
 
 {
   "title": "성수→홍대 당일 데이트 코스 🗺️",
@@ -43,15 +60,16 @@ Authorization: Bearer {accessToken}
 
 ###
 
-### 5. 피드 상세 조회 (조회수 +1 확인)
+### ✅ 5. 피드 상세 조회 (조회수 +1 확인)
 GET http://localhost:8083/api/feeds/1
 
 ###
 
-### 6. 피드 수정 (본인만 가능)
+### ✅ 6. 피드 수정 (본인만 가능)
 PUT http://localhost:8083/api/feeds/1
 Content-Type: application/json
-Authorization: Bearer {accessToken}
+# Authorization: Bearer {accessToken}
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJ0YXNzQHpvbmkuY29tIiwidXNlcklkIjoxLCJuaWNrbmFtZSI6InRhc3MiLCJpYXQiOjE3NzcxOTE2MDAsImV4cCI6MTc3NzE5MzQwMH0.A7s0nYmJcvCprixHX4QyLA4APT4KMq20ZGuSp38PYLIJEdjumML11ki2aCROj2NS
 
 {
   "title": "성수동 카페 완전 핫함 ☕ (수정됨)",
@@ -61,16 +79,18 @@ Authorization: Bearer {accessToken}
 
 ###
 
-### 7. 내 피드 목록 (JWT 필요)
+### ✅ 7. 내 피드 목록 (JWT 필요)
 GET http://localhost:8083/api/feeds/my?page=0&size=10
-Authorization: Bearer {accessToken}
+# Authorization: Bearer {accessToken}
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJ0YXNzQHpvbmkuY29tIiwidXNlcklkIjoxLCJuaWNrbmFtZSI6InRhc3MiLCJpYXQiOjE3NzcxOTE2MDAsImV4cCI6MTc3NzE5MzQwMH0.A7s0nYmJcvCprixHX4QyLA4APT4KMq20ZGuSp38PYLIJEdjumML11ki2aCROj2NS
 
 ###
 
-### 8. 커뮤니티 피드 작성
+### ✅ 8. 커뮤니티 피드 작성
 POST http://localhost:8083/api/feeds
 Content-Type: application/json
-Authorization: Bearer {accessToken}
+# Authorization: Bearer {accessToken}
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJ0YXNzQHpvbmkuY29tIiwidXNlcklkIjoxLCJuaWNrbmFtZSI6InRhc3MiLCJpYXQiOjE3NzcxOTE2MDAsImV4cCI6MTc3NzE5MzQwMH0.A7s0nYmJcvCprixHX4QyLA4APT4KMq20ZGuSp38PYLIJEdjumML11ki2aCROj2NS
 
 {
   "title": "혼자 여행 처음인데 어디가 좋을까요?",
@@ -80,18 +100,18 @@ Authorization: Bearer {accessToken}
 
 ###
 
-### 9. 피드 삭제 (소프트 삭제 - 본인만)
+### ✅ 9. 피드 삭제 (소프트 삭제 - 본인만)
 DELETE http://localhost:8083/api/feeds/1
 Authorization: Bearer {accessToken}
 
 ###
 
-### 10. 삭제된 피드 조회 → 404 응답 확인
+### ✅ 10. 삭제된 피드 조회 → 404 응답 확인
 GET http://localhost:8083/api/feeds/1
 
 ###
 
-### 11. 권한 없이 피드 작성 시도 → 403 응답 확인
+### ✅ 11. 권한 없이 피드 작성 시도 → 401 응답 확인
 POST http://localhost:8083/api/feeds
 Content-Type: application/json
 
@@ -103,13 +123,73 @@ Content-Type: application/json
 
 ###
 
-### 12. 잘못된 카테고리 → 400 응답 확인
+### ✅ 12. 잘못된 카테고리 → 400 응답 확인
 POST http://localhost:8083/api/feeds
 Content-Type: application/json
-Authorization: Bearer {accessToken}
+# Authorization: Bearer {accessToken}
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJ0YXNzQHpvbmkuY29tIiwidXNlcklkIjoxLCJuaWNrbmFtZSI6InRhc3MiLCJpYXQiOjE3NzcxOTE2MDAsImV4cCI6MTc3NzE5MzQwMH0.A7s0nYmJcvCprixHX4QyLA4APT4KMq20ZGuSp38PYLIJEdjumML11ki2aCROj2NS
 
 {
   "title": "테스트",
   "content": "잘못된 카테고리",
   "category": "ROOM_WANTED"
 }
+
+###
+
+## ================================================================
+## 🆕 Phase 5 — 피드 좋아요 + Kafka 알림 연동 테스트
+##
+## [시나리오]
+## 유저 A: 피드 작성자  → service-user에서 A계정 로그인 → tokenA 복사
+## 유저 B: 좋아요 누르는 사람 → service-user에서 B계정 로그인 → tokenB 복사
+##
+## [Kafka 알림 확인 방법]
+## 좋아요(13번) 실행 후 notify-api.http의 "내 알림 목록"(tokenA)을 실행
+## → type: "FEED_LIKED" 알림이 1개 생성되어야 함
+## ================================================================
+
+### ✅ 13. 피드 좋아요 (B가 A의 피드에 좋아요)
+# 유저 B의 accessToken 사용
+# 응답: { isLiked: true, likeCount: 1 }
+POST http://localhost:8083/api/feeds/1/like
+# Authorization: Bearer {tokenB}
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJqYXlAem9uaS5jb20iLCJ1c2VySWQiOjMsIm5pY2tuYW1lIjoiamF5IiwiaWF0IjoxNzc3NDQzMjg5LCJleHAiOjE3Nzc0NDUwODl9.uDfx85TFf6kXHH97a6w5Sa0Dp_CYwu-u15GFLbZ_CGoKf3rDR1aqhZt6RfGWAn4q
+###
+
+### ✅ 14. 좋아요 취소 (B가 같은 피드 다시 누르면 토글)
+# 동일 엔드포인트 재호출
+# 응답: { isLiked: false, likeCount: 0 }
+POST http://localhost:8083/api/feeds/1/like
+# Authorization: Bearer {tokenB}
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJqYXlAem9uaS5jb20iLCJ1c2VySWQiOjMsIm5pY2tuYW1lIjoiamF5IiwiaWF0IjoxNzc3MTkyMDIyLCJleHAiOjE3NzcxOTM4MjJ9.jDRIHQDbE9Yuq7gxzmlaG4bGpqRRqAjhgXFIAK4SLxjz9XvE9ouuoA_JBbzsi8FM
+
+###
+
+### ✅ 15. 피드 다시 좋아요 (알림 재생성 확인)
+# 응답: { isLiked: true, likeCount: 1 }
+POST http://localhost:8083/api/feeds/1/like
+# Authorization: Bearer {tokenB}
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJqYXlAem9uaS5jb20iLCJ1c2VySWQiOjMsIm5pY2tuYW1lIjoiamF5IiwiaWF0IjoxNzc3MTkyMDIyLCJleHAiOjE3NzcxOTM4MjJ9.jDRIHQDbE9Yuq7gxzmlaG4bGpqRRqAjhgXFIAK4SLxjz9XvE9ouuoA_JBbzsi8FM
+
+###
+
+### ✅ 16. 좋아요 확인 - 피드 상세에서 likeCount 확인
+# likeCount: 1 이어야 함
+GET http://localhost:8083/api/feeds/1
+
+###
+
+### ✅ 17. 본인 피드 좋아요 (A가 자신의 피드 → 알림 미생성 확인)
+# 유저 A의 accessToken 사용
+# 응답: { isLiked: true, likeCount: 2 } — 좋아요는 성공하지만 notify 알림은 생성 안 됨
+POST http://localhost:8083/api/feeds/1/like
+# Authorization: Bearer {tokenA}
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJ0YXNzQHpvbmkuY29tIiwidXNlcklkIjoxLCJuaWNrbmFtZSI6InRhc3MiLCJpYXQiOjE3NzcxOTE2MDAsImV4cCI6MTc3NzE5MzQwMH0.A7s0nYmJcvCprixHX4QyLA4APT4KMq20ZGuSp38PYLIJEdjumML11ki2aCROj2NS
+
+###
+
+### ✅ 18. 토큰 없이 좋아요 시도 → 401 응답 확인
+POST http://localhost:8083/api/feeds/1/like
+
+###

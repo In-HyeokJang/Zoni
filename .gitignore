@@ -49,3 +49,5 @@ out/
 CLAUDE.md
 planning.md
 dev-log.md
+dev-status.md
+.claude/settings.local.json
