@@ -46,6 +46,10 @@ out/
 **/application-local.yml
 
 ### Claude Code (개인용, 팀 공유 안 함) ###
+CLAUDE_bak.md
+planning_bak.md
+dev-log_bak.md
+dev-status_bak.md
 CLAUDE.md
 planning.md
 dev-log.md
