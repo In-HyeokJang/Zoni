@@ -4,13 +4,17 @@ import com.zoni.common.ErrorCode
 import com.zoni.common.ZoniException
 import com.zoni.feed.domain.Feed
 import com.zoni.feed.domain.FeedCategory
+import com.zoni.feed.domain.FeedLike
 import com.zoni.feed.dto.request.FeedCreateRequest
 import com.zoni.feed.dto.request.FeedUpdateRequest
+import com.zoni.feed.dto.response.FeedLikeResponse
 import com.zoni.feed.dto.response.FeedPageResponse
 import com.zoni.feed.dto.response.FeedResponse
 import com.zoni.feed.dto.response.FeedSummaryResponse
 import com.zoni.feed.event.FeedCreatedEvent
 import com.zoni.feed.event.FeedEventPublisher
+import com.zoni.feed.event.FeedLikedEvent
+import com.zoni.feed.repository.FeedLikeRepository
 import com.zoni.feed.repository.FeedRepository
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
@@ -22,6 +26,7 @@ import java.time.LocalDateTime
 @Transactional(readOnly = true)
 class FeedService(
     private val feedRepository: FeedRepository,
+    private val feedLikeRepository: FeedLikeRepository,
     private val feedEventPublisher: FeedEventPublisher
 ) {
 
@@ -68,15 +73,16 @@ class FeedService(
             imageUrl = request.imageUrl
         )
         return feedRepository.save(feed).also {
-            feedEventPublisher.publishFeedCreated(
-                FeedCreatedEvent(
-                    feedId   = it.id,
-                    userId   = it.userId,
-                    nickname = it.nickname,
-                    title    = it.title,
-                    category = it.category.name
-                )
-            )
+            // TODO: 추후 팔로워 기능 도입 시 주석 해제 및 알림 타겟 변경 로직 추가 필요
+            // feedEventPublisher.publishFeedCreated(
+            //     FeedCreatedEvent(
+            //         feedId   = it.id,
+            //         userId   = it.userId,
+            //         nickname = it.nickname,
+            //         title    = it.title,
+            //         category = it.category.name
+            //     )
+            // )
         }.toResponse()
     }
 
@@ -123,6 +129,31 @@ class FeedService(
             pageSize      = size,
             isLast        = feedPage.isLast
         )
+    }
+
+    /** 피드 좋아요 토글 (JWT 인증 필요) */
+    @Transactional
+    fun toggleLike(userId: Long, nickname: String, feedId: Long): FeedLikeResponse {
+        val feed = findActiveFeed(feedId)
+        val existing = feedLikeRepository.findByUserIdAndFeedId(userId, feedId)
+
+        return if (existing != null) {
+            feedLikeRepository.delete(existing)
+            feed.likeCount = maxOf(0, feed.likeCount - 1)
+            FeedLikeResponse(isLiked = false, likeCount = feed.likeCount)
+        } else {
+            feedLikeRepository.save(FeedLike(userId = userId, feedId = feedId))
+            feed.likeCount++
+            feedEventPublisher.publishFeedLiked(
+                FeedLikedEvent(
+                    feedId        = feed.id,
+                    feedOwnerId   = feed.userId,
+                    likerUserId   = userId,
+                    likerNickname = nickname
+                )
+            )
+            FeedLikeResponse(isLiked = true, likeCount = feed.likeCount)
+        }
     }
 
     // ── 내부 헬퍼 ─────────────────────────────────────────────────
