@@ -12,10 +12,16 @@ class FeedEventPublisher(
 
     companion object {
         const val TOPIC_FEED_CREATED = "feed.created"
+        const val TOPIC_FEED_LIKED   = "feed.liked"
     }
 
     fun publishFeedCreated(event: FeedCreatedEvent) {
         kafkaTemplate.send(TOPIC_FEED_CREATED, event.feedId.toString(), event)
         log.info("[Kafka] 피드 생성 이벤트 발행 - feedId: {}, userId: {}", event.feedId, event.userId)
+    }
+
+    fun publishFeedLiked(event: FeedLikedEvent) {
+        kafkaTemplate.send(TOPIC_FEED_LIKED, event.feedId.toString(), event)
+        log.info("[Kafka] 피드 좋아요 이벤트 발행 - feedId: {}, likerUserId: {}", event.feedId, event.likerUserId)
     }
 }
