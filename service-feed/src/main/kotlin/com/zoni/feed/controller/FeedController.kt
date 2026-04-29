@@ -4,6 +4,7 @@ import com.zoni.common.ApiResponse
 import com.zoni.common.JwtPrincipal
 import com.zoni.feed.dto.request.FeedCreateRequest
 import com.zoni.feed.dto.request.FeedUpdateRequest
+import com.zoni.feed.dto.response.FeedLikeResponse
 import com.zoni.feed.dto.response.FeedPageResponse
 import com.zoni.feed.dto.response.FeedResponse
 import com.zoni.feed.service.FeedService
@@ -90,5 +91,18 @@ class FeedController(
         @AuthenticationPrincipal principal: JwtPrincipal
     ): ApiResponse<FeedPageResponse> =
         ApiResponse.ok(feedService.getMyFeeds(principal.userId, page, size))
+
+    /**
+     * 피드 좋아요 토글 (JWT 인증 필요)
+     * POST /api/feeds/{id}/like
+     * Authorization: Bearer {accessToken}
+     * → 좋아요 없으면 추가, 있으면 취소
+     */
+    @PostMapping("/{id}/like")
+    fun toggleLike(
+        @PathVariable id: Long,
+        @AuthenticationPrincipal principal: JwtPrincipal
+    ): ApiResponse<FeedLikeResponse> =
+        ApiResponse.ok(feedService.toggleLike(principal.userId, principal.nickname, id))
 }
 

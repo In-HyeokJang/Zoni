@@ -31,4 +31,7 @@ dependencies {
 
     // 공통 모듈 (ApiResponse, ErrorCode, ZoniException, JwtPrincipal)
     implementation(project(":module-common"))
+
+    // Test
+    testImplementation("org.mockito.kotlin:mockito-kotlin:5.1.0")
 }

@@ -80,7 +80,11 @@ class Feed(
 
     /** 소프트 삭제 */
     @Column(nullable = false)
-    var isDeleted: Boolean = false
+    var isDeleted: Boolean = false,
+
+    /** 동시성 방어 (낙관적 락) */
+    @Version
+    var version: Long = 0
 )
 
 enum class FeedCategory {

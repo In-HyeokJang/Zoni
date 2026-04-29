@@ -3,15 +3,18 @@ GET http://localhost:8087/health
 
 ### 내 알림 목록 조회 (JWT 필요)
 GET http://localhost:8087/api/notifications?page=0&size=20
-Authorization: Bearer {{access_token}}
+# Authorization: Bearer {{access_token}}
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJ0YXNzQHpvbmkuY29tIiwidXNlcklkIjoxLCJuaWNrbmFtZSI6InRhc3MiLCJpYXQiOjE3Nzc0NDMyOTksImV4cCI6MTc3NzQ0NTA5OX0.Qz3RFitxO8wA34KTIn32eBNjzMZqKmnVac9DFIiJ3royWn8yvUc-69rpNSdpiuWq
 
 ### 내 알림 목록 조회 - 2페이지
 GET http://localhost:8087/api/notifications?page=1&size=10
-Authorization: Bearer {{access_token}}
+# Authorization: Bearer {{access_token}}
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJ0YXNzQHpvbmkuY29tIiwidXNlcklkIjoxLCJuaWNrbmFtZSI6InRhc3MiLCJpYXQiOjE3NzcxOTE2MDAsImV4cCI6MTc3NzE5MzQwMH0.A7s0nYmJcvCprixHX4QyLA4APT4KMq20ZGuSp38PYLIJEdjumML11ki2aCROj2NS
 
 ### 특정 알림 읽음 처리
 PATCH http://localhost:8087/api/notifications/1/read
-Authorization: Bearer {{access_token}}
+# Authorization: Bearer {{access_token}}
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJ0YXNzQHpvbmkuY29tIiwidXNlcklkIjoxLCJuaWNrbmFtZSI6InRhc3MiLCJpYXQiOjE3Nzc0NDMyOTksImV4cCI6MTc3NzQ0NTA5OX0.Qz3RFitxO8wA34KTIn32eBNjzMZqKmnVac9DFIiJ3royWn8yvUc-69rpNSdpiuWq
 
 ### 전체 알림 읽음 처리
 PATCH http://localhost:8087/api/notifications/read-all

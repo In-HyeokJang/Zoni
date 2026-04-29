@@ -7,6 +7,7 @@ import com.zoni.notify.domain.NotificationType
 import com.zoni.notify.dto.response.NotificationPageResponse
 import com.zoni.notify.dto.response.NotificationResponse
 import com.zoni.notify.event.FeedCreatedEvent
+import com.zoni.notify.event.FeedLikedEvent
 import com.zoni.notify.repository.NotificationRepository
 import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Service
@@ -26,6 +27,39 @@ class NotificationService(
                 userId      = event.userId,
                 type        = NotificationType.FEED_CREATED,
                 message     = "${event.nickname}님의 피드가 등록되었습니다: ${event.title}",
+                referenceId = event.feedId
+            )
+        )
+    }
+
+    /** Kafka 이벤트 → 좋아요 알림 생성 (피드 작성자에게) */
+    @Transactional
+    fun createLikeNotification(event: FeedLikedEvent) {
+        if (event.feedOwnerId == event.likerUserId) return  // 본인 좋아요는 알림 생략
+        notificationRepository.save(
+            Notification(
+                userId      = event.feedOwnerId,
+                type        = NotificationType.FEED_LIKED,
+                message     = "${event.likerNickname}님이 회원님의 피드를 좋아합니다.",
+                referenceId = event.feedId
+            )
+        )
+    }
+
+    /**
+     * [Kafka 이벤트 → 피드 댓글 알림 생성 서비스]
+     * 
+     * 1. 이벤트를 수신받아 알림(Notification) 엔티티 생성
+     * 2. 피드 작성자(feedOwnerId)에게 알림 발송
+     */
+    @Transactional
+    fun createCommentNotification(event: com.zoni.notify.event.FeedCommentedEvent) {
+        if (event.feedOwnerId == event.commenterId) return // 본인 댓글은 알림 생략
+        notificationRepository.save(
+            Notification(
+                userId      = event.feedOwnerId,
+                type        = NotificationType.FEED_COMMENTED,
+                message     = "${event.commenterNickname}님이 댓글을 남겼습니다: ${event.content.take(20)}...",
                 referenceId = event.feedId
             )
         )
@@ -60,11 +94,7 @@ class NotificationService(
     /** 전체 읽음 처리 */
     @Transactional
     fun markAllAsRead(userId: Long) {
-        val pageable = PageRequest.of(0, Int.MAX_VALUE)
-        notificationRepository.findByUserIdOrderByCreatedAtDesc(userId, pageable)
-            .content
-            .filter { !it.isRead }
-            .forEach { it.isRead = true }
+        notificationRepository.markAllAsReadByUserId(userId)
     }
 
     private fun Notification.toResponse() = NotificationResponse(
