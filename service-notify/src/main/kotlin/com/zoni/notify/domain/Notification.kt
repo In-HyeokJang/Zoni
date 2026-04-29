@@ -38,5 +38,6 @@ class Notification(
 
 enum class NotificationType {
     FEED_CREATED,  // 피드 등록 알림
-    FEED_LIKED     // 피드 좋아요 알림
+    FEED_LIKED,    // 피드 좋아요 알림
+    FEED_COMMENTED // 피드 댓글 알림
 }

@@ -29,4 +29,10 @@ class FeedEventConsumer(
         log.info("[Kafka] 피드 좋아요 이벤트 수신 - feedId: {}, likerUserId: {}", event.feedId, event.likerUserId)
         notificationService.createLikeNotification(event)
     }
+
+    @KafkaListener(topics = ["feed.commented"], groupId = "zoni-notify-group")
+    fun handleFeedCommented(event: FeedCommentedEvent) {
+        log.info("[Kafka] 피드 댓글 이벤트 수신 - feedId: {}, commenterId: {}", event.feedId, event.commenterId)
+        notificationService.createCommentNotification(event)
+    }
 }

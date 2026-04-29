@@ -46,6 +46,25 @@ class NotificationService(
         )
     }
 
+    /**
+     * [Kafka 이벤트 → 피드 댓글 알림 생성 서비스]
+     * 
+     * 1. 이벤트를 수신받아 알림(Notification) 엔티티 생성
+     * 2. 피드 작성자(feedOwnerId)에게 알림 발송
+     */
+    @Transactional
+    fun createCommentNotification(event: com.zoni.notify.event.FeedCommentedEvent) {
+        if (event.feedOwnerId == event.commenterId) return // 본인 댓글은 알림 생략
+        notificationRepository.save(
+            Notification(
+                userId      = event.feedOwnerId,
+                type        = NotificationType.FEED_COMMENTED,
+                message     = "${event.commenterNickname}님이 댓글을 남겼습니다: ${event.content.take(20)}...",
+                referenceId = event.feedId
+            )
+        )
+    }
+
     /** 내 알림 목록 조회 */
     fun getMyNotifications(userId: Long, page: Int, size: Int): NotificationPageResponse {
         val pageable = PageRequest.of(page, size)

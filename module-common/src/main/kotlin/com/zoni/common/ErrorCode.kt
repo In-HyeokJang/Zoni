@@ -27,6 +27,7 @@ enum class ErrorCode(
     FEED_NOT_FOUND(404, "피드를 찾을 수 없습니다."),
     FEED_ALREADY_DELETED(400, "이미 삭제된 피드입니다."),
     FEED_ALREADY_LIKED(409, "이미 좋아요한 피드입니다."),
+    COMMENT_NOT_FOUND(404, "댓글을 찾을 수 없습니다."),
 
     // ── Notify ────────────────────────────────────────
     NOTIFICATION_NOT_FOUND(404, "알림을 찾을 수 없습니다."),
