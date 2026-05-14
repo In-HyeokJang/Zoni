@@ -16,13 +16,14 @@ import org.springframework.transaction.annotation.Transactional
 @Service
 @Transactional(readOnly = true)
 class NotificationService(
-    private val notificationRepository: NotificationRepository
+    private val notificationRepository: NotificationRepository,
+    private val sseEmitterManager: SseEmitterManager
 ) {
 
-    /** Kafka 이벤트 → 알림 생성 */
+    /** Kafka 이벤트 → 알림 생성 + SSE push */
     @Transactional
     fun createFeedNotification(event: FeedCreatedEvent) {
-        notificationRepository.save(
+        val notification = notificationRepository.save(
             Notification(
                 userId      = event.userId,
                 type        = NotificationType.FEED_CREATED,
@@ -30,13 +31,14 @@ class NotificationService(
                 referenceId = event.feedId
             )
         )
+        sseEmitterManager.send(event.userId, notification.toResponse())
     }
 
-    /** Kafka 이벤트 → 좋아요 알림 생성 (피드 작성자에게) */
+    /** Kafka 이벤트 → 좋아요 알림 생성 + SSE push (피드 작성자에게) */
     @Transactional
     fun createLikeNotification(event: FeedLikedEvent) {
         if (event.feedOwnerId == event.likerUserId) return  // 본인 좋아요는 알림 생략
-        notificationRepository.save(
+        val notification = notificationRepository.save(
             Notification(
                 userId      = event.feedOwnerId,
                 type        = NotificationType.FEED_LIKED,
@@ -44,18 +46,20 @@ class NotificationService(
                 referenceId = event.feedId
             )
         )
+        sseEmitterManager.send(event.feedOwnerId, notification.toResponse())
     }
 
     /**
-     * [Kafka 이벤트 → 피드 댓글 알림 생성 서비스]
-     * 
+     * [Kafka 이벤트 → 피드 댓글 알림 생성 + SSE push]
+     *
      * 1. 이벤트를 수신받아 알림(Notification) 엔티티 생성
      * 2. 피드 작성자(feedOwnerId)에게 알림 발송
+     * 3. SSE 연결 중이면 즉시 push
      */
     @Transactional
     fun createCommentNotification(event: com.zoni.notify.event.FeedCommentedEvent) {
         if (event.feedOwnerId == event.commenterId) return // 본인 댓글은 알림 생략
-        notificationRepository.save(
+        val notification = notificationRepository.save(
             Notification(
                 userId      = event.feedOwnerId,
                 type        = NotificationType.FEED_COMMENTED,
@@ -63,6 +67,7 @@ class NotificationService(
                 referenceId = event.feedId
             )
         )
+        sseEmitterManager.send(event.feedOwnerId, notification.toResponse())
     }
 
     /** 내 알림 목록 조회 */
