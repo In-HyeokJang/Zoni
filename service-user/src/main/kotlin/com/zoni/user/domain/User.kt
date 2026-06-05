@@ -48,6 +48,14 @@ class User(
     @Column(name = "profile_image_url", length = 500)
     var profileImageUrl: String? = null,
 
+    /**
+     * 출생 연도 (Phase 3-B: 청년 혜택 연령 필터용)
+     * 회원가입 시 선택 입력 → 이후 PATCH /api/users/me/birth-year 로 별도 업데이트 가능.
+     * null = 연령 미제공 → 혜택 나이 필터에서 제외.
+     */
+    @Column(name = "birth_year")
+    var birthYear: Int? = null,
+
     @Column(nullable = false)
     val createdAt: LocalDateTime = LocalDateTime.now(),
 

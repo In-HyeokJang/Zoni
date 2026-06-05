@@ -40,3 +40,10 @@ kakao:
 cache:
   search-ttl: 3600    # 검색 결과 캐시: 1시간
   popular-ttl: 1800   # 인기 장소 캐시: 30분
+  benefit-ttl: 3600   # 혜택 장소 캐시: 1시간 (Phase 3-B 신설)
+
+# 공공데이터포털(data.go.kr) API 키 (Phase 3-B 청년 혜택 데이터 연동)
+# 공공데이터포털 → 로그인 → 마이페이지 → 일반 인증키 복사
+# API 미사용 시 비워두면 자동으로 스킵됨
+public-data:
+  api-key: YOUR_PUBLIC_DATA_API_KEY
