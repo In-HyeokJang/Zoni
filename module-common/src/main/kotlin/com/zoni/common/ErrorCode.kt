@@ -37,6 +37,12 @@ enum class ErrorCode(
     PLACE_ALREADY_SAVED(409, "이미 저장한 장소입니다."),
     KAKAO_MAP_API_ERROR(502, "장소 검색 중 오류가 발생했습니다."),
 
+    // ── Benefit (Phase 3-B) ───────────────────────────
+    BENEFIT_PLACE_NOT_FOUND(404, "혜택 장소를 찾을 수 없습니다."),
+    PUBLIC_DATA_API_ERROR(502, "공공데이터 조회 중 오류가 발생했습니다."),
+    INVALID_BIRTH_YEAR(400, "생년은 1900년 이상 현재 연도 이하이어야 합니다."),
+    INVALID_AGE_RANGE(400, "대상 연령 범위가 올바르지 않습니다."),
+
     // ── Common ────────────────────────────────────────
     BAD_REQUEST(400, "잘못된 요청입니다."),
     FORBIDDEN(403, "접근 권한이 없습니다."),
